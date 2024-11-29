@@ -5,14 +5,14 @@ import Home from "./Home";
 import Header from "./Header";
 import Login from "./Login";
 import { useStateValue } from "./StateProvider";
-import { auth, onAuthStateChanged } from './firebase'
+import { auth } from './firebase'
 
 function App() {
   const [, dispatch] = useStateValue();
 
   useEffect(() => {
 
-    onAuthStateChanged(auth, (user) => {
+    auth.onAuthStateChanged((user) => {
       if (user) {
         dispatch({
           type: "SET_USER",
