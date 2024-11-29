@@ -1,10 +1,24 @@
 import React, { useState } from 'react';
 import './Login.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { auth, createUserWithEmailAndPassword } from './firebase'
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  let navigate = useNavigate();
+
+  const register = e => {
+    e.preventDefault();
+
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((auth) => {
+        if (auth) {
+          navigate("/");
+        }
+      })
+      .catch(error => alert(error.message))
+  }
 
   return (
     <div className='login'>
@@ -33,7 +47,7 @@ function Login() {
           see our Privacy Notice, our Cookies Notice and our Interest-Based Ads Notice.
         </p>
 
-        <button className='login__registerButton'>Create your Amazon Account</button>
+        <button onClick={register} className='login__registerButton'>Create your Amazon Account</button>
       </div>
     </div>
   )
