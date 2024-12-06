@@ -3,9 +3,21 @@ import { Link } from 'react-router-dom'
 import { useStateValue } from './StateProvider'
 import CheckoutProduct from './CheckoutProduct'
 import './Payment.css'
+import { CardElement } from '@stripe/react-stripe-js'
+import { getBasketTotal } from './reducer'
 
 function Payment() {
+  const dollarUS = Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  });
+  
   const [{ basket, user }] = useStateValue();
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    // Payment stuff here
+  }
 
   return (
     <div className='payment'>
@@ -47,6 +59,16 @@ function Payment() {
           </div>
           <div className='payment__details'>
 
+            <form onSubmit={handleSubmit}>
+              <CardElement />
+
+              <div className='payment__priceContainer'>
+                <h3>Order Total: {dollarUS.format(getBasketTotal(basket))}</h3>
+                <button>
+                  <span>{"Buy Now"}</span>
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
