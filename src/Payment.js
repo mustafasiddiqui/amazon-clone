@@ -6,6 +6,8 @@ import './Payment.css'
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js'
 import { getBasketTotal } from './reducer'
 import axios from './axios'
+import { db } from './firebase'
+import { collection, doc, setDoc } from 'firebase/firestore'
 
 function Payment() {
   const dollarUS = Intl.NumberFormat("en-US", {
@@ -46,6 +48,13 @@ function Payment() {
         card: elements.getElement(CardElement)
       }
     }).then(({ paymentIntent }) => {
+
+      const docRef = setDoc(doc(db, 'users', user?.uid, 'orders', paymentIntent.id), {
+        basket: basket,
+        amount: paymentIntent.amount,
+        created: paymentIntent.created
+      })
+
       setSucceeded(true);
       setProcessing(false);
 
