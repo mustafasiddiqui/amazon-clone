@@ -7,7 +7,7 @@ import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js'
 import { getBasketTotal } from './reducer'
 import axios from './axios'
 import { db } from './firebase'
-import { collection, doc, setDoc } from 'firebase/firestore'
+import { doc, setDoc } from 'firebase/firestore'
 
 function Payment() {
   const dollarUS = Intl.NumberFormat("en-US", {
