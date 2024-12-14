@@ -21,6 +21,8 @@ function Payment() {
   const elements = useElements();
 
   const [clientSecret, setClientSecret] = useState(true);
+  const [disabled, setDisabled] = useState(true);
+  const [error, setError] = useState(null)
   const [processing, setProcessing] = useState("");
   const [succeeded, setSucceeded] = useState(false);
 
@@ -57,6 +59,8 @@ function Payment() {
 
       setSucceeded(true);
       setProcessing(false);
+      setError(null);
+
 
       dispatch({
         type: 'EMPTY_BASKET'
@@ -64,6 +68,11 @@ function Payment() {
 
       navigate('/orders');
     })
+  }
+
+  const handleChange = event => {
+    setDisabled(event.error ? true : false);
+    setError(event.error?.message);
   }
 
   return (
@@ -107,14 +116,16 @@ function Payment() {
           <div className='payment__details'>
 
             <form onSubmit={handleSubmit}>
-              <CardElement />
+              <CardElement onChange={handleChange} />
 
               <div className='payment__priceContainer'>
                 <h3>Order Total: {dollarUS.format(getBasketTotal(basket))}</h3>
-                <button disabled={processing || succeeded}>
+                <button disabled={processing || disabled || succeeded}>
                   <span>{processing ? "Processing" : "Buy Now"}</span>
                 </button>
               </div>
+
+              {error && <div>{error}</div>}
             </form>
           </div>
         </div>
