@@ -29,16 +29,19 @@ function Payment() {
   let navigate = useNavigate();
 
   useEffect(() => {
-    const getClientSecret = async () => {
+    const getClientSecret = async (basketTotal) => {
       const response = await axios({
         method: 'post',
-        url: `/payments/create?total=${getBasketTotal(basket) * 100}`
+        url: `/payments/create?total=${basketTotal * 100}`
       })
 
       setClientSecret(response.data.clientSecret)
     };
 
-    getClientSecret();
+    const basketTotal = getBasketTotal(basket)
+    if (basketTotal > 0) {
+      getClientSecret(basketTotal);
+    }
   }, [basket])
 
   const handleSubmit = async (event) => {
@@ -50,7 +53,6 @@ function Payment() {
         card: elements.getElement(CardElement)
       }
     }).then(({ paymentIntent }) => {
-
       const docRef = setDoc(doc(db, 'users', user?.uid, 'orders', paymentIntent.id), {
         basket: basket,
         amount: paymentIntent.amount,
