@@ -2,6 +2,26 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Prerequisite Setup
+* Firebase - Configure a new project at https://console.firebase.google.com/ and save the `firebaseConfig` in `src\firebaseConfig.js`
+* Stripe
+  * Save your Stripe secret key in `functions\.amazon-clonerc`
+  * Your Stripe public key goes in `src\App.js`: 
+  ```const promise = loadStripe("...")```
+* API URL - Save the URL of your configured Firestore function as `config.apiUrl` in  `src\config.js`
+
+## Deployment
+
+In the root of the project, create a `.firebaserc` file with contents, using the name of the Firebase project you've configured:
+```
+{
+  "projects": {
+    "default": "YOUR_FIREBASE_APP_NAME"
+  }
+}
+```
+Run `firebase deploy`
+
 ## Available Scripts
 
 In the project directory, you can run:
